@@ -19,12 +19,18 @@ fi
 echo "📋 Checking prerequisites..."
 echo ""
 
-# Check Python
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 not found. Please install Python 3.10 or later."
-    exit 1
+# Check Python 3.11 (required for Real-ESRGAN compatibility)
+PYTHON311=""
+if command -v /opt/homebrew/opt/python@3.11/bin/python3.11 &> /dev/null; then
+    PYTHON311="/opt/homebrew/opt/python@3.11/bin/python3.11"
+    echo "✓ Python 3.11 found: $($PYTHON311 --version)"
+elif command -v python3.11 &> /dev/null; then
+    PYTHON311="python3.11"
+    echo "✓ Python 3.11 found: $(python3.11 --version)"
 else
-    echo "✓ Python 3 found: $(python3 --version)"
+    echo "❌ Python 3.11 not found. Real-ESRGAN requires Python 3.11."
+    echo "   Install with: brew install python@3.11"
+    exit 1
 fi
 
 # Check Node.js
@@ -50,10 +56,10 @@ echo ""
 
 cd backend
 
-# Create virtual environment
+# Create virtual environment with Python 3.11
 if [ ! -d "venv" ]; then
-    echo "Creating Python virtual environment..."
-    python3 -m venv venv
+    echo "Creating Python 3.11 virtual environment..."
+    $PYTHON311 -m venv venv
 fi
 
 # Activate virtual environment
@@ -61,7 +67,7 @@ source venv/bin/activate
 
 # Install PyTorch with MPS support
 echo "Installing PyTorch with MPS support (this may take a few minutes)..."
-pip3 install --quiet --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
+pip3 install --quiet torch torchvision
 
 # Install other dependencies
 echo "Installing backend dependencies..."

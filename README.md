@@ -32,7 +32,7 @@ A professional-grade, local video upscaling application optimized for **Apple Si
 Ensure you have the following installed on your Mac:
 
 - **macOS** with Apple Silicon (M1, M2, or M3)
-- **Python 3.10+**
+- **Python 3.11** (required — Real-ESRGAN is incompatible with Python 3.13+)
 - **Node.js 18+** & npm
 - **FFmpeg** (with VideoToolbox support)
 
@@ -50,12 +50,13 @@ brew install ffmpeg
 ```bash
 cd backend
 
-# Create and activate virtual environment
-python3 -m venv venv
+# Create virtual environment with Python 3.11 (required for Real-ESRGAN)
+brew install python@3.11  # if not already installed
+/opt/homebrew/opt/python@3.11/bin/python3.11 -m venv venv
 source venv/bin/activate
 
-# Install PyTorch with MPS support (nightly)
-pip3 install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
+# Install PyTorch with MPS support
+pip3 install torch torchvision
 
 # Install remaining dependencies
 pip3 install -r requirements.txt

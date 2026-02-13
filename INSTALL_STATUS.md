@@ -1,45 +1,30 @@
-# M1-Upscale-Engine Installation Guide
+# M1-Upscale-Engine Installation Status
 
-## ⚠️ Python Version Compatibility Notice
+## Current Status: Fully Working
 
-The Real-ESRGAN model dependencies (`basicsr` and `realesrgan`) currently have **compatibility issues with Python 3.13**.
+All components are installed and operational, including Real-ESRGAN AI upscaling.
 
-### Current Status
+### Environment
 
-✅ **Working**: The application runs with a **high-quality bicubic upscaling fallback** that:
-- Uses OpenCV's INTER_CUBIC interpolation (better than simple bicubic)
-- Applies smart sharpening for improved perceived quality
-- Provides 4x resolution increase
-- Works on M1 with MPS acceleration for supported operations
+- **Python**: 3.11.14 (via Homebrew)
+- **PyTorch**: 2.3.1 with MPS (Metal) acceleration
+- **Real-ESRGAN**: Loaded with RealESRGAN_x4plus weights (67 MB)
+- **FFmpeg**: 8.0.1 with VideoToolbox hardware encoding
 
-### For Real-ESRGAN AI Upscaling
+### What's Installed
 
-To use the full Real-ESRGAN AI model, you have two options:
+- FastAPI backend with async processing
+- PyTorch with MPS support
+- Real-ESRGAN AI model (basicsr + realesrgan)
+- OpenCV for image processing
+- FFmpeg with h264_videotoolbox encoding
+- Next.js frontend with dark UI
+- All core dependencies
 
-#### Option 1: Use Python 3.10 or 3.11 (Recommended)
-
-```bash
-# Install Python 3.11 via Homebrew
-brew install python@3.11
-
-# Create virtual environment with Python 3.11
-/opt/homebrew/bin/python3.11 -m venv backend/venv
-
-# Activate and install
-cd backend
-source venv/bin/activate
-pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
-pip install -r requirements.txt
-```
-
-#### Option 2: Use Current Setup (Python 3.13 + Fallback)
-
-The current installation works out of the box with high-quality upscaling, just without the AI enhancement.
-
-## Quick Start (Current Setup)
+## Quick Start
 
 ```bash
-# Backend (already installed)
+# Backend
 cd backend
 source venv/bin/activate
 python main.py
@@ -51,13 +36,6 @@ npm run dev
 
 Open `http://localhost:3000` and start upscaling!
 
-## What's Been Installed
+## Note on Python Version
 
-✅ FastAPI backend with async processing  
-✅ PyTorch with MPS support  
-✅ OpenCV for image processing  
-✅ FFmpeg with h264_videotoolbox encoding  
-✅ Next.js 14 frontend with dark UI  
-✅ All core dependencies  
-
-The only missing piece is the optional Real-ESRGAN AI model, which requires Python 3.10/3.11.
+The virtual environment uses **Python 3.11** because `basicsr` and `realesrgan` are incompatible with Python 3.13+. Do not recreate the venv with a newer Python version.
